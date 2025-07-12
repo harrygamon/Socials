@@ -1,3 +1,4 @@
+// Trigger redeploy: ensure welcome page is deployed
 "use client";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -12,10 +13,10 @@ export default function WelcomePage() {
           Connect, discover, and share with people around you. Please log in or sign up to get started!
         </p>
         <button
-          onClick={() => signIn("github", { callbackUrl: "/" })}
-          className="w-full mb-4 py-2 bg-secondary-900 hover:bg-secondary-800 text-white rounded-lg font-medium"
+          onClick={() => signIn("google", { callbackUrl: "/" })}
+          className="w-full mb-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium"
         >
-          Continue with GitHub
+          Continue with Google
         </button>
         <button
           onClick={() => router.push("/auth/signin")}
