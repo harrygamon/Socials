@@ -15,12 +15,6 @@ export default function SignInPage() {
     return null
   }
 
-  const handleGitHubSignIn = async () => {
-    setIsLoading(true)
-    await signIn('github', { callbackUrl: '/' })
-    setIsLoading(false)
-  }
-
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
@@ -34,33 +28,24 @@ export default function SignInPage() {
       <div className="w-full max-w-md bg-white dark:bg-secondary-800 rounded-xl shadow p-8">
         <h1 className="text-2xl font-bold mb-6 text-center text-primary-600 dark:text-primary-400">Sign in to Social</h1>
         {!isEmailSent ? (
-          <>
+          <form onSubmit={handleEmailSignIn} className="space-y-4">
+            <input
+              type="email"
+              placeholder="Email address"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+              className="w-full px-3 py-2 border border-secondary-200 dark:border-secondary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-secondary-800 text-secondary-900 dark:text-white placeholder-secondary-500"
+            />
             <button
-              onClick={handleGitHubSignIn}
-              disabled={isLoading}
-              className="w-full mb-4 py-2 bg-secondary-900 hover:bg-secondary-800 text-white rounded-lg font-medium"
+              type="submit"
+              disabled={isLoading || !email}
+              className="w-full py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium"
             >
-              Continue with GitHub
+              {isLoading ? 'Sending...' : 'Continue with Email'}
             </button>
-            <form onSubmit={handleEmailSignIn} className="space-y-4">
-              <input
-                type="email"
-                placeholder="Email address"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-                className="w-full px-3 py-2 border border-secondary-200 dark:border-secondary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-secondary-800 text-secondary-900 dark:text-white placeholder-secondary-500"
-              />
-              <button
-                type="submit"
-                disabled={isLoading || !email}
-                className="w-full py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium"
-              >
-                {isLoading ? 'Sending...' : 'Continue with Email'}
-              </button>
-            </form>
-          </>
-        ) : (
+          </form>
+        ) :
           <div className="text-center space-y-4">
             <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto">
               <span className="text-3xl">📧</span>
@@ -69,7 +54,7 @@ export default function SignInPage() {
               Check your email
             </h3>
             <p className="text-sm text-secondary-600 dark:text-secondary-400 mt-2">
-              We've sent a magic link to <strong>{email}</strong>
+              We&apos;ve sent a magic link to <strong>{email}</strong>
             </p>
             <button
               onClick={() => setIsEmailSent(false)}
@@ -78,7 +63,7 @@ export default function SignInPage() {
               Try a different email
             </button>
           </div>
-        )}
+        }
       </div>
     </div>
   )
