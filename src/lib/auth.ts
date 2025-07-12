@@ -1,15 +1,15 @@
 import { NextAuthOptions } from 'next-auth'
 import { PrismaAdapter } from '@auth/prisma-adapter'
-import GitHubProvider from 'next-auth/providers/github'
+import GoogleProvider from 'next-auth/providers/google'
 import EmailProvider from 'next-auth/providers/email'
 import { prisma } from './db'
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
-    GitHubProvider({
-      clientId: process.env.GITHUB_ID!,
-      clientSecret: process.env.GITHUB_SECRET!,
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
     EmailProvider({
       server: {
@@ -33,7 +33,7 @@ export const authOptions: NextAuthOptions = {
       }
       // Add subscription to session
       if (session.user) {
-        (session.user as any).subscription = token.subscription as string | null
+        (session.user as any).subscription = (token as any).subscription ?? null;
       }
       return session
     },
@@ -41,7 +41,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.sub = user.id
         // Add subscription to JWT
-        token.subscription = (user as any).subscription || null
+        (token as any).subscription = (user as any).subscription ?? null;
       }
       return token
     },
@@ -55,8 +55,8 @@ export const authOptions: NextAuthOptions = {
 }
 
 // Helper for protecting server components/routes
-export async function requireAuth(session: any) {
-  if (!session || !session.user) {
+export async function requireAuth(session: unknown) {
+  if (!session || !(session as any).user) {
     throw new Error('Not authenticated')
   }
   return session

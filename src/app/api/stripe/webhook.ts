@@ -17,9 +17,9 @@ export async function POST(req: NextRequest) {
 
   switch (event.type) {
     case 'checkout.session.completed': {
-      const session = event.data.object as any
-      const customerId = session.customer
-      const email = session.customer_email
+      const session = event.data.object as unknown
+      const customerId = (session as any).customer
+      const email = (session as any).customer_email
       // Update user with Stripe customer ID
       if (email && customerId) {
         await prisma.user.update({
@@ -31,12 +31,12 @@ export async function POST(req: NextRequest) {
     }
     case 'customer.subscription.updated':
     case 'customer.subscription.created': {
-      const subscription = event.data.object as any
-      const customerId = subscription.customer
+      const subscription = event.data.object as unknown
+      const customerId = (subscription as any).customer
       let plan = 'FREE'
-      if (subscription.items.data.some((item: any) => item.price.id === process.env.STRIPE_SILVER_PRICE_ID)) {
+      if ((subscription as any).items.data.some((item: any) => item.price.id === process.env.STRIPE_SILVER_PRICE_ID)) {
         plan = 'SILVER'
-      } else if (subscription.items.data.some((item: any) => item.price.id === process.env.STRIPE_GOLD_PRICE_ID)) {
+      } else if ((subscription as any).items.data.some((item: any) => item.price.id === process.env.STRIPE_GOLD_PRICE_ID)) {
         plan = 'GOLD'
       }
       await prisma.user.updateMany({
@@ -46,8 +46,8 @@ export async function POST(req: NextRequest) {
       break
     }
     case 'customer.subscription.deleted': {
-      const subscription = event.data.object as any
-      const customerId = subscription.customer
+      const subscription = event.data.object as unknown
+      const customerId = (subscription as any).customer
       await prisma.user.updateMany({
         where: { stripeCustomerId: customerId },
         data: { subscription: 'FREE' },

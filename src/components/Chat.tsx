@@ -3,11 +3,11 @@ import { useState, useEffect, useRef } from "react";
 import { usePusherMessages } from "@/hooks/usePusherMessages";
 
 export default function Chat({ conversationId, userId }: { conversationId: string; userId: string }) {
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<unknown[]>([]);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  usePusherMessages(conversationId, (msg) => {
+  usePusherMessages(conversationId, (msg: unknown) => {
     setMessages((prev) => [...prev, msg]);
   });
 
@@ -29,11 +29,17 @@ export default function Chat({ conversationId, userId }: { conversationId: strin
   return (
     <div style={{ border: "1px solid #ccc", padding: 16, maxWidth: 400 }}>
       <div style={{ height: 200, overflowY: "auto", marginBottom: 8 }}>
-        {messages.map((msg, i) => (
-          <div key={i} style={{ margin: "4px 0", color: msg.sender?.id === userId ? "blue" : "black" }}>
-            <b>{msg.sender?.name || "User"}:</b> {msg.content}
-          </div>
-        ))}
+        {messages.map((msg, i) => {
+          if (typeof msg === 'object' && msg !== null && 'sender' in msg && 'content' in msg) {
+            const m = msg as { sender?: { id?: string; name?: string }; content?: string };
+            return (
+              <div key={i} style={{ margin: "4px 0", color: m.sender?.id === userId ? "blue" : "black" }}>
+                <b>{m.sender?.name || "User"}:</b> {m.content}
+              </div>
+            );
+          }
+          return null;
+        })}
         <div ref={messagesEndRef} />
       </div>
       <form onSubmit={sendMessage} style={{ display: "flex" }}>

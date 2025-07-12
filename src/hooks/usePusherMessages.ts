@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Pusher from "pusher-js";
 
-export function usePusherMessages(conversationId: string, onMessage: (msg: any) => void) {
+export function usePusherMessages(conversationId: string, onMessage: (msg: unknown) => void) {
   useEffect(() => {
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
       cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
