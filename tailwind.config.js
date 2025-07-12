@@ -31,6 +31,7 @@ module.exports = {
           light: '#ffb3c6',
           dark: '#800032',
         },
+        border: '#e5e7eb', // Tailwind gray-200
         secondary: {
           50: '#f8fafc',
           100: '#f1f5f9',
