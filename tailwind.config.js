@@ -23,6 +23,8 @@ module.exports = {
         },
         primary: {
           DEFAULT: '#ff1a64',
+          500: '#ff1a64',
+          600: '#e60058',
           light: '#ff80a6',
           dark: '#b30045',
         },
