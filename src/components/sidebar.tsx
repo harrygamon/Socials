@@ -5,10 +5,8 @@ import { usePathname } from 'next/navigation'
 import { 
   Home, 
   Heart, 
-  Search, 
   MessageCircle, 
   User, 
-  Users,
   Sparkles
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'

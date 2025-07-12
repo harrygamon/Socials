@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 type Post = {
   author: {
     name: string
@@ -15,10 +17,12 @@ export default function PostCard({ post }: { post: Post }) {
     <div className="post-card bg-white/90 dark:bg-jelly-900/90 rounded-3xl shadow-jelly border border-jelly-100 overflow-hidden transition-all duration-200 hover:scale-[1.015] hover:shadow-2xl">
       {/* Header */}
       <div className="flex items-center gap-3 p-4">
-        <img
+        <Image
           src={post.author.avatar}
           alt={post.author.name}
           className="w-12 h-12 rounded-full object-cover border-2 border-jelly-200 shadow-jelly"
+          width={48}
+          height={48}
         />
         <div>
           <div className="font-bold text-jelly-900 text-lg">{post.author.name}</div>
@@ -29,10 +33,12 @@ export default function PostCard({ post }: { post: Post }) {
       <div className="px-6 pb-4">
         <p className="text-jelly-900 dark:text-white mb-3 whitespace-pre-line text-base font-medium">{post.content}</p>
         {post.image && (
-          <img
+          <Image
             src={post.image}
             alt="Post image"
             className="w-full rounded-2xl object-cover max-h-96 mb-2 border border-jelly-100 shadow-jelly"
+            width={600}
+            height={384}
           />
         )}
         <div className="flex items-center gap-6 mt-2 text-base">

@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
 
 const plans = [
   {
@@ -39,8 +38,6 @@ const plans = [
 ]
 
 export default function PricingPage() {
-  const router = useRouter()
-
   const handleSubscribe = async (plan: 'SILVER' | 'GOLD') => {
     const res = await fetch('/api/stripe/checkout', {
       method: 'POST',

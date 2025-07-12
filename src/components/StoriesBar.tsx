@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 const mockStories = [
   {
     id: 1,
@@ -38,7 +40,7 @@ export default function StoriesBar() {
         {mockStories.map((story) => (
           <div key={story.id} className="flex flex-col items-center flex-shrink-0">
             <div className="w-16 h-16 rounded-full border-2 border-primary-500 flex items-center justify-center mb-1 overflow-hidden">
-              <img src={story.avatar} alt={story.name} className="w-full h-full object-cover" />
+              <Image src={story.avatar} alt={story.name} className="w-full h-full object-cover" width={64} height={64} />
             </div>
             <span className="text-xs text-secondary-700 dark:text-secondary-300 truncate w-16 text-center">{story.name}</span>
           </div>

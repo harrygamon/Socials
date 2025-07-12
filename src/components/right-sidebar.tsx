@@ -1,6 +1,6 @@
 'use client'
 
-import { TrendingUp, Hash, Users, Calendar } from 'lucide-react'
+import { TrendingUp, Hash, Calendar } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 const trendingTags = [
@@ -54,7 +54,7 @@ export function RightSidebar() {
             <TrendingUp className="h-5 w-5 text-jelly-400" />
           </div>
           <div className="space-y-2">
-            {trendingTags.map((tag, index) => (
+            {trendingTags.map((tag) => (
               <div
                 key={tag.name}
                 className="flex items-center justify-between p-2 rounded-xl hover:bg-jelly-50 transition-colors cursor-pointer shadow-jelly"

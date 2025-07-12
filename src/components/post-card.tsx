@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Heart, MessageCircle, Share, MoreHorizontal, Bookmark } from 'lucide-react'
-import { formatDistanceToNow } from 'date-fns'
+import Image from 'next/image'
 
 interface Post {
   id: string
@@ -84,19 +84,23 @@ export function PostCard({ post }: PostCardProps) {
       {post.images.length > 0 && (
         <div className="relative">
           {post.images.length === 1 ? (
-            <img
+            <Image
               src={post.images[0]}
               alt="Post"
               className="w-full max-h-96 object-cover"
+              width={600}
+              height={384}
             />
           ) : (
             <div className="grid grid-cols-2 gap-1">
               {post.images.slice(0, showAllImages ? post.images.length : 2).map((image, index) => (
                 <div key={index} className="relative">
-                  <img
+                  <Image
                     src={image}
                     alt={`Post ${index + 1}`}
                     className="w-full h-48 object-cover"
+                    width={300}
+                    height={192}
                   />
                   {index === 1 && post.images.length > 2 && !showAllImages && (
                     <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">

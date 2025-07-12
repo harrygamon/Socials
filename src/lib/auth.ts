@@ -33,7 +33,9 @@ export const authOptions: NextAuthOptions = {
       }
       // Add subscription to session
       if (session.user) {
-        (session.user as any).subscription = (token as any).subscription ?? null;
+        if ('subscription' in token) {
+          (session.user as typeof session.user & { subscription?: string | null }).subscription = (token as { subscription?: string | null }).subscription ?? null;
+        }
       }
       return session
     },
@@ -41,7 +43,9 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.sub = user.id
         // Add subscription to JWT
-        (token as any).subscription = (user as any).subscription ?? null;
+        if ('subscription' in user) {
+          (token as typeof token & { subscription?: string | null }).subscription = (user as { subscription?: string | null }).subscription ?? null;
+        }
       }
       return token
     },
@@ -56,7 +60,7 @@ export const authOptions: NextAuthOptions = {
 
 // Helper for protecting server components/routes
 export async function requireAuth(session: unknown) {
-  if (!session || !(session as any).user) {
+  if (!session || typeof session !== 'object' || !('user' in session)) {
     throw new Error('Not authenticated')
   }
   return session

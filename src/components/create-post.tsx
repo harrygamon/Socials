@@ -4,7 +4,8 @@ import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
-import { Image, Smile, Mic, Send } from 'lucide-react'
+import { Image as LucideImage, Smile, Mic, Send } from 'lucide-react'
+import Image from 'next/image'
 
 export function CreatePost() {
   const { data: session } = useSession()
@@ -57,10 +58,12 @@ export function CreatePost() {
           <div className="grid grid-cols-2 gap-2">
             {images.map((image, index) => (
               <div key={index} className="relative">
-                <img
+                <Image
                   src={URL.createObjectURL(image)}
                   alt={`Preview ${index + 1}`}
                   className="w-full h-32 object-cover rounded-lg"
+                  width={256}
+                  height={128}
                 />
                 <button
                   type="button"
@@ -91,7 +94,7 @@ export function CreatePost() {
                 size="sm"
                 className="text-secondary-600 dark:text-secondary-400 hover:text-primary-600 dark:hover:text-primary-400"
               >
-                <Image className="w-5 h-5" />
+                <LucideImage className="w-5 h-5" />
               </Button>
             </label>
             

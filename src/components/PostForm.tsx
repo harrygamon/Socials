@@ -1,5 +1,6 @@
 'use client'
 import { useState, useRef } from 'react'
+import Image from 'next/image'
 
 export default function PostForm() {
   const [content, setContent] = useState('')
@@ -59,8 +60,12 @@ export default function PostForm() {
       setContent('')
       setImages([])
       setPreviews([])
-    } catch (err: any) {
-      setError(err.message || 'Something went wrong')
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || 'Something went wrong')
+      } else {
+        setError('Something went wrong')
+      }
     } finally {
       setLoading(false)
     }
@@ -82,7 +87,7 @@ export default function PostForm() {
         <div className="grid grid-cols-2 gap-2">
           {previews.map((src, idx) => (
             <div key={idx} className="relative group">
-              <img src={src} alt="Preview" className="w-full h-32 object-cover rounded-lg" />
+              <Image src={src} alt="Preview" className="w-full h-32 object-cover rounded-lg" width={256} height={128} />
               <button type="button" onClick={() => removeImage(idx)} className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600 transition-colors">×</button>
             </div>
           ))}

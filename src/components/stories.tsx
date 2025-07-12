@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-react'
@@ -59,7 +58,7 @@ const mockStories = [
 ]
 
 export function Stories() {
-  const [activeStory, setActiveStory] = useState<string | null>(null)
+  // Remove: const [activeStory, setActiveStory] = useState<string | null>(null)
 
   return (
     <div className="bg-white dark:bg-secondary-800 rounded-xl p-4 shadow-sm border border-secondary-200 dark:border-secondary-700">
@@ -83,7 +82,7 @@ export function Stories() {
           <div
             key={story.id}
             className="flex flex-col items-center space-y-2 flex-shrink-0 cursor-pointer"
-            onClick={() => setActiveStory(story.id)}
+            // Remove: onClick={() => setActiveStory(story.id)}
           >
             <div
               className={`w-16 h-16 rounded-full p-0.5 ${

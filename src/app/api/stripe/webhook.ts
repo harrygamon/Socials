@@ -9,7 +9,9 @@ function isSession(obj: unknown): obj is { customer: string; customer_email: str
 }
 
 function isSubscription(obj: unknown): obj is { customer: string; items: { data: { price: { id: string } }[] } } {
-  return typeof obj === 'object' && obj !== null && 'customer' in obj && 'items' in obj && typeof (obj as any).items === 'object' && Array.isArray((obj as any).items.data);
+  return typeof obj === 'object' && obj !== null && 'customer' in obj && 'items' in obj &&
+    typeof (obj as { items?: unknown }).items === 'object' &&
+    Array.isArray((obj as { items: { data: unknown[] } }).items.data);
 }
 
 export async function POST(req: NextRequest) {
