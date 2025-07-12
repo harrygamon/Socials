@@ -4,6 +4,14 @@ import { prisma } from '@/lib/prisma'
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!
 
+function isSession(obj: unknown): obj is { customer: string; customer_email: string } {
+  return typeof obj === 'object' && obj !== null && 'customer' in obj && 'customer_email' in obj;
+}
+
+function isSubscription(obj: unknown): obj is { customer: string; items: { data: { price: { id: string } }[] } } {
+  return typeof obj === 'object' && obj !== null && 'customer' in obj && 'items' in obj && typeof (obj as any).items === 'object' && Array.isArray((obj as any).items.data);
+}
+
 export async function POST(req: NextRequest) {
   const sig = req.headers.get('stripe-signature')
   const buf = await req.arrayBuffer()
@@ -18,40 +26,45 @@ export async function POST(req: NextRequest) {
   switch (event.type) {
     case 'checkout.session.completed': {
       const session = event.data.object as unknown
-      const customerId = (session as any).customer
-      const email = (session as any).customer_email
-      // Update user with Stripe customer ID
-      if (email && customerId) {
-        await prisma.user.update({
-          where: { email },
-          data: { stripeCustomerId: customerId },
-        })
+      if (isSession(session)) {
+        const customerId = session.customer
+        const email = session.customer_email
+        if (email && customerId) {
+          await prisma.user.update({
+            where: { email },
+            data: { stripeCustomerId: customerId },
+          })
+        }
       }
       break
     }
     case 'customer.subscription.updated':
     case 'customer.subscription.created': {
       const subscription = event.data.object as unknown
-      const customerId = (subscription as any).customer
-      let plan = 'FREE'
-      if ((subscription as any).items.data.some((item: any) => item.price.id === process.env.STRIPE_SILVER_PRICE_ID)) {
-        plan = 'SILVER'
-      } else if ((subscription as any).items.data.some((item: any) => item.price.id === process.env.STRIPE_GOLD_PRICE_ID)) {
-        plan = 'GOLD'
+      if (isSubscription(subscription)) {
+        const customerId = subscription.customer
+        let plan = 'FREE'
+        if (subscription.items.data.some((item) => item.price.id === process.env.STRIPE_SILVER_PRICE_ID)) {
+          plan = 'SILVER'
+        } else if (subscription.items.data.some((item) => item.price.id === process.env.STRIPE_GOLD_PRICE_ID)) {
+          plan = 'GOLD'
+        }
+        await prisma.user.updateMany({
+          where: { stripeCustomerId: customerId },
+          data: { subscription: plan },
+        })
       }
-      await prisma.user.updateMany({
-        where: { stripeCustomerId: customerId },
-        data: { subscription: plan },
-      })
       break
     }
     case 'customer.subscription.deleted': {
       const subscription = event.data.object as unknown
-      const customerId = (subscription as any).customer
-      await prisma.user.updateMany({
-        where: { stripeCustomerId: customerId },
-        data: { subscription: 'FREE' },
-      })
+      if (isSubscription(subscription)) {
+        const customerId = subscription.customer
+        await prisma.user.updateMany({
+          where: { stripeCustomerId: customerId },
+          data: { subscription: 'FREE' },
+        })
+      }
       break
     }
     default:
