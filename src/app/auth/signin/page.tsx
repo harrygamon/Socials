@@ -16,20 +16,30 @@ export default function SignInPage() {
     return null
   }
 
-  const handleEmailSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    await signIn('email', { email, redirect: false })
-    setIsLoading(false)
-    setIsEmailSent(true)
-  }
+  const handleEmailSignIn = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    setMode('signin');
+    setIsLoading(true);
+    await signIn('email', { email, redirect: false });
+    setIsLoading(false);
+    setIsEmailSent(true);
+  };
+
+  const handleEmailSignUp = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    setMode('signup');
+    setIsLoading(true);
+    await signIn('email', { email, redirect: false });
+    setIsLoading(false);
+    setIsEmailSent(true);
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-secondary-900 dark:to-secondary-800 px-4">
       <div className="w-full max-w-md bg-white dark:bg-secondary-800 rounded-xl shadow p-8">
         <h1 className="text-2xl font-bold mb-6 text-center text-primary-600 dark:text-primary-400">Sign in to Social</h1>
         {!isEmailSent ? (
-          <form onSubmit={handleEmailSubmit} className="space-y-4">
+          <form className="space-y-4">
             <input
               type="email"
               placeholder="Email address"
@@ -40,18 +50,18 @@ export default function SignInPage() {
             />
             <div className="flex gap-2">
               <button
-                type="submit"
+                type="button"
                 disabled={isLoading || !email}
                 className="flex-1 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium"
-                onClick={() => setMode('signin')}
+                onClick={handleEmailSignIn}
               >
                 {isLoading && mode === 'signin' ? 'Sending...' : 'Sign In'}
               </button>
               <button
-                type="submit"
+                type="button"
                 disabled={isLoading || !email}
                 className="flex-1 py-2 bg-secondary-500 hover:bg-secondary-600 text-white rounded-lg font-medium"
-                onClick={() => setMode('signup')}
+                onClick={handleEmailSignUp}
               >
                 {isLoading && mode === 'signup' ? 'Sending...' : 'Sign Up'}
               </button>
