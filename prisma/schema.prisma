@@ -67,6 +67,8 @@ model User {
   matchedWith   Match[]   @relation("MatchedWith")
   swipes        Swipe[]
   swipedOn      Swipe[]   @relation("SwipedOn")
+  suggestedFor  Suggested[] @relation("SuggestionsFor")
+  suggestedOf   Suggested[] @relation("SuggestionsOf")
 }
 
 model VerificationToken {
@@ -180,4 +182,16 @@ model Swipe {
   createdAt DateTime @default(now())
 
   @@unique([swiperId, swipedId])
+}
+
+model Suggested {
+  id        String   @id @default(cuid())
+  userId    String   // The user who receives the suggestion
+  suggestedUserId String // The user who is being suggested
+  createdAt DateTime @default(now())
+
+  user           User @relation("SuggestionsFor", fields: [userId], references: [id])
+  suggestedUser  User @relation("SuggestionsOf", fields: [suggestedUserId], references: [id])
+
+  @@unique([userId, suggestedUserId])
 } 
