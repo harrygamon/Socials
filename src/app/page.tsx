@@ -1,3 +1,6 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { redirect } from "next/navigation";
 import Navbar from '@/components/navbar'
 import Feed from '@/components/Feed'
 import StoriesBar from '@/components/StoriesBar'
@@ -6,7 +9,11 @@ import Trending from '@/components/Trending'
 import PostForm from '@/components/PostForm'
 import Link from 'next/link'
 
-export default function HomePage() {
+export default async function HomePage() {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user) {
+    redirect("/welcome");
+  }
   return (
     <div className="min-h-screen bg-secondary-50 dark:bg-secondary-900">
       {/* Top Navbar */}
