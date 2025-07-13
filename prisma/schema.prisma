@@ -10,188 +10,64 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
 }
 
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Tier {
+  id          String   @id @default(uuid())
+  name        String   // Free, Silver, Gold
+  price       Int      // in GBP cents
+  description String
+  features    String[]
+  users       User[]
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  bio           String?
-  age           Int?
-  location      String?
-  interests     String[]
-  subscription  String    @default("FREE") // FREE, SILVER, GOLD
-  stripeCustomerId String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  accounts      Account[]
-  sessions      Session[]
-  posts         Post[]
-  stories       Story[]
-  likes         Like[]
-  comments      Comment[]
-  followers     Follows[] @relation("following")
-  following     Follows[] @relation("follower")
-  messages      Message[]
-  conversations Conversation[] @relation("ConversationParticipants")
-  voiceNotes    VoiceNote[]
-  matches       Match[]   @relation("UserMatches")
-  matchedWith   Match[]   @relation("MatchedWith")
-  swipes        Swipe[]
-  swipedOn      Swipe[]   @relation("SwipedOn")
-  suggestedFor  Suggested[] @relation("SuggestionsFor")
-  suggestedOf   Suggested[] @relation("SuggestionsOf")
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String   // hashed password
+  image     String?
+  bio       String?
+  age       Int
+  gender    Gender
+  location  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tierId    String
+  tier      Tier     @relation(fields: [tierId], references: [id])
+  matchesA  Match[]  @relation("UserAMatches")
+  matchesB  Match[]  @relation("UserBMatches")
+  posts     Post[]
+  messages  Message[]
 }
 
 model Post {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   content   String
-  images    String[]
+  mediaUrls String[]
+  createdAt DateTime @default(now())
   authorId  String
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  likes     Like[]
-  comments  Comment[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Story {
-  id        String   @id @default(cuid())
-  content   String?
-  image     String
-  authorId  String
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  expiresAt DateTime
-}
-
-model Like {
-  id        String   @id @default(cuid())
-  userId    String
-  postId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-
-  @@unique([userId, postId])
-}
-
-model Comment {
-  id        String   @id @default(cuid())
-  content   String
-  userId    String
-  postId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-}
-
-model Follows {
-  followerId  String
-  followingId String
-  follower    User     @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
-  following   User     @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
-  createdAt   DateTime @default(now())
-
-  @@id([followerId, followingId])
-}
-
-model Conversation {
-  id        String    @id @default(cuid())
-  participants User[]  @relation("ConversationParticipants")
-  messages  Message[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-}
-
-model Message {
-  id             String       @id @default(cuid())
-  content        String
-  conversationId String
-  senderId       String
-  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-  sender         User         @relation(fields: [senderId], references: [id], onDelete: Cascade)
-  createdAt      DateTime     @default(now())
-  transcript     String?      // Voice note transcript
-  audioUrl       String?      // Voice note audio file URL
-}
-
-model VoiceNote {
-  id        String   @id @default(cuid())
-  audioUrl  String
-  duration  Int      // in seconds
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
+  author    User     @relation(fields: [authorId], references: [id])
 }
 
 model Match {
-  id        String   @id @default(cuid())
-  user1Id   String
-  user2Id   String
-  user1     User     @relation("UserMatches", fields: [user1Id], references: [id], onDelete: Cascade)
-  user2     User     @relation("MatchedWith", fields: [user2Id], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-
-  @@unique([user1Id, user2Id])
+  id        String   @id @default(uuid())
+  userAId   String
+  userBId   String
+  userA     User     @relation("UserAMatches", fields: [userAId], references: [id])
+  userB     User     @relation("UserBMatches", fields: [userBId], references: [id])
+  matchedAt DateTime @default(now())
 }
 
-model Swipe {
-  id        String   @id @default(cuid())
-  swiperId  String
-  swipedId  String
-  direction String   // "left" or "right"
-  swiper    User     @relation(fields: [swiperId], references: [id], onDelete: Cascade)
-  swiped    User     @relation("SwipedOn", fields: [swipedId], references: [id], onDelete: Cascade)
+model Message {
+  id        String   @id @default(uuid())
+  content   String
   createdAt DateTime @default(now())
-
-  @@unique([swiperId, swipedId])
-}
-
-model Suggested {
-  id        String   @id @default(cuid())
-  userId    String   // The user who receives the suggestion
-  suggestedUserId String // The user who is being suggested
-  createdAt DateTime @default(now())
-
-  user           User @relation("SuggestionsFor", fields: [userId], references: [id])
-  suggestedUser  User @relation("SuggestionsOf", fields: [suggestedUserId], references: [id])
-
-  @@unique([userId, suggestedUserId])
+  senderId  String
+  sender    User     @relation(fields: [senderId], references: [id])
+  // Add recipientId and relation if you want direct messages
 } 
