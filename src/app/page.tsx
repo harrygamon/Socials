@@ -11,9 +11,10 @@ import Link from 'next/link'
 
 export default async function HomePage() {
   const session = await getServerSession(authOptions);
-  if (!session || !session.user) {
-    redirect("/welcome");
-  }
+  // Temporarily bypass session check for development
+  // if (!session || !session.user) {
+  //   redirect("/welcome");
+  // }
   return (
     <div className="min-h-screen bg-secondary-50 dark:bg-secondary-900">
       {/* Top Navbar */}
