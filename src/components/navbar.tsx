@@ -27,7 +27,7 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 font-extrabold text-2xl text-jelly-600 drop-shadow">
-            <span>JellySocial</span>
+            <span>Social</span>
           </Link>
           {/* Desktop Nav */}
           <div className="hidden md:flex space-x-2">
