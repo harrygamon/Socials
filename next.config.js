@@ -1,10 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
   images: {
-    domains: ['res.cloudinary.com', 'avatars.githubusercontent.com'],
+    domains: ['res.cloudinary.com', 'avatars.githubusercontent.com', 'images.unsplash.com', 'randomuser.me', 'via.placeholder.com'],
   },
   env: {
     CUSTOM_KEY: process.env.CUSTOM_KEY,
