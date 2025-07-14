@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
-import { MessageCircle, Heart, Star } from 'lucide-react'
+import { MessageCircle, Heart } from 'lucide-react'
+import Image from 'next/image'
 
 interface Match {
   id: number
@@ -57,7 +58,7 @@ const mockMatches: Match[] = [
 ]
 
 export default function MatchesPage() {
-  const [matches, setMatches] = useState<Match[]>(mockMatches)
+  const [matches] = useState<Match[]>(mockMatches)
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null)
 
   return (
@@ -95,10 +96,11 @@ export default function MatchesPage() {
             >
               {/* Profile Image */}
               <div className="relative h-48">
-                <img 
+                <Image 
                   src={match.image} 
                   alt={match.name}
-                  className="w-full h-full object-cover"
+                  layout="fill"
+                  objectFit="cover"
                   onError={(e) => {
                     e.currentTarget.src = 'https://via.placeholder.com/150x150/f3f4f6/9ca3af?text=Profile'
                   }}

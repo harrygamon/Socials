@@ -1,4 +1,3 @@
-import type { AuthOptions } from 'next-auth'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import GoogleProvider from 'next-auth/providers/google'
 import EmailProvider from 'next-auth/providers/email'
@@ -6,9 +5,8 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import { prisma } from './db'
 import { resend } from './resend'
-import type { User as PrismaUser } from '@prisma/client'
 
-export const authOptions: AuthOptions = {
+export const authOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
@@ -25,9 +23,7 @@ export const authOptions: AuthOptions = {
         },
       },
       from: "onboarding@resend.dev",
-      sendVerificationRequest({ identifier, url, provider, theme }) {
-        const { resend } = require('./resend');
-        
+      sendVerificationRequest({ identifier, url }) {
         const html = `
           <body style="background: #f6f6f9; font-family: 'Helvetica Neue', sans-serif; padding: 2rem;">
             <table role="presentation" style="max-width: 480px; margin: auto; background: #ffffff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.1);">
@@ -75,7 +71,7 @@ export const authOptions: AuthOptions = {
         if (!credentials?.email || !credentials?.password) {
           return null
         }
-        const user = await prisma.user.findUnique({ where: { email: credentials.email } }) as any
+        const user = await prisma.user.findUnique({ where: { email: credentials.email } }) as unknown as { id: string; name: string; email: string; image: string; password: string } | null
         if (!user || !user.password) {
           return null
         }
@@ -97,24 +93,24 @@ export const authOptions: AuthOptions = {
     strategy: 'jwt',
   },
   callbacks: {
-    async session({ session, token }: { session: any, token: any }) {
-      if (session.user && token.sub) {
-        session.user.id = token.sub
+    async session({ session, token }: { session: unknown; token: unknown }) {
+      if (session && typeof session === 'object' && 'user' in session && token && typeof token === 'object' && 'sub' in token) {
+        (session as { user: { id: string } }).user.id = (token as { sub: string }).sub
       }
       // Add subscription to session
-      if (session.user) {
-        if ('subscription' in token) {
-          (session.user as typeof session.user & { subscription?: string | null }).subscription = (token as { subscription?: string | null }).subscription ?? null;
+      if (session && typeof session === 'object' && 'user' in session) {
+        if ('subscription' in (session as { user: { subscription?: string | null } }).user) {
+          (session as { user: { subscription?: string | null } }).user.subscription = (token as { subscription?: string | null }).subscription ?? null;
         }
       }
       return session
     },
-    async jwt({ token, user }: { token: any, user: any }) {
+    async jwt({ token, user }: { token: unknown; user: unknown }) {
       if (user) {
-        token.sub = user.id
+        (token as { sub: string }).sub = (user as { id: string }).id
         // Add subscription to JWT
-        if ('subscription' in user) {
-          (token as typeof token & { subscription?: string | null }).subscription = (user as { subscription?: string | null }).subscription ?? null;
+        if ('subscription' in (user as { subscription?: string | null })) {
+          (token as { subscription?: string | null }).subscription = (user as { subscription?: string | null }).subscription ?? null;
         }
       }
       return token

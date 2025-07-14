@@ -1,5 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// MVP Prisma schema for Social app
+// Uses PostgreSQL by default
 
 generator client {
   provider = "prisma-client-js"
@@ -10,48 +10,90 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Gender {
-  MALE
-  FEMALE
-  OTHER
-}
-
-model Tier {
-  id          String   @id @default(uuid())
-  name        String   // Free, Silver, Gold
-  price       Int      // in GBP cents
-  description String
-  features    String[]
-  users       User[]
+enum SubscriptionTier {
+  FREE
+  SILVER
+  GOLD
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String   // hashed password
-  image     String?
-  bio       String?
-  age       Int
-  gender    Gender
-  location  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  tierId    String
-  tier      Tier     @relation(fields: [tierId], references: [id])
-  matchesA  Match[]  @relation("UserAMatches")
-  matchesB  Match[]  @relation("UserBMatches")
-  posts     Post[]
-  messages  Message[]
+  id           String        @id @default(uuid())
+  name         String
+  email        String        @unique
+  image        String?
+  bio          String?
+  age          Int?
+  gender       String?
+  location     String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  lastActive   DateTime?
+  isVerified   Boolean       @default(false)
+  deletedAt    DateTime?
+  posts        Post[]
+  comments     Comment[]
+  likes        Like[]
+  subscription Subscription?
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+  matchesA         Match[]   @relation("UserAMatches")
+  matchesB         Match[]   @relation("UserBMatches")
+  notifications    Notification[]
 }
 
 model Post {
+  id        String     @id @default(uuid())
+  content   String
+  image     String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  deletedAt DateTime?
+  visibility String    @default("public")
+  authorId  String
+  author    User       @relation(fields: [authorId], references: [id])
+  likes     Like[]
+  comments  Comment[]
+}
+
+model Like {
+  id        String   @id @default(uuid())
+  userId    String
+  postId    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId])
+}
+
+model Comment {
   id        String   @id @default(uuid())
   content   String
-  mediaUrls String[]
   createdAt DateTime @default(now())
   authorId  String
+  postId    String
   author    User     @relation(fields: [authorId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+}
+
+model Subscription {
+  id        String            @id @default(uuid())
+  userId    String            @unique
+  tier      SubscriptionTier
+  startedAt DateTime          @default(now())
+  expiresAt DateTime?
+  user      User              @relation(fields: [userId], references: [id])
+}
+
+model Message {
+  id          String   @id @default(uuid())
+  content     String
+  createdAt   DateTime @default(now())
+  senderId    String
+  recipientId String
+  sender      User     @relation("SentMessages", fields: [senderId], references: [id])
+  recipient   User     @relation("ReceivedMessages", fields: [recipientId], references: [id])
+  read        Boolean  @default(false)
 }
 
 model Match {
@@ -63,11 +105,12 @@ model Match {
   matchedAt DateTime @default(now())
 }
 
-model Message {
+model Notification {
   id        String   @id @default(uuid())
-  content   String
+  userId    String
+  type      String
+  message   String
+  read      Boolean  @default(false)
   createdAt DateTime @default(now())
-  senderId  String
-  sender    User     @relation(fields: [senderId], references: [id])
-  // Add recipientId and relation if you want direct messages
+  user      User     @relation(fields: [userId], references: [id])
 } 

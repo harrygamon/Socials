@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -12,15 +12,44 @@ export function CreatePost() {
   const [content, setContent] = useState('')
   const [images, setImages] = useState<File[]>([])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!content.trim() && images.length === 0) return
-    
-    // TODO: Implement post creation
-    console.log('Creating post:', { content, images })
-    
-    setContent('')
-    setImages([])
+    try {
+      // Upload images to Cloudinary
+      const urls: string[] = []
+      for (const img of images) {
+        const formData = new FormData()
+        formData.append('file', img)
+        formData.append('upload_preset', 'social-posts')
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`, {
+          method: 'POST',
+          body: formData,
+        })
+        const data = await res.json()
+        if (!data.secure_url) throw new Error('Image upload failed')
+        urls.push(data.secure_url)
+      }
+      // Save post to API
+      const postRes = await fetch('/api/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content, images: urls }),
+      })
+      if (!postRes.ok) throw new Error('Failed to create post')
+      setContent('')
+      setImages([])
+      // Notify Feed to refresh
+      window.dispatchEvent(new Event('refresh-feed'))
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        // setError(err.message || 'Something went wrong') // This line was removed
+      } else {
+        // setError('Something went wrong') // This line was removed
+      }
+    } finally {
+      // setLoading(false) // This line was removed
+    }
   }
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {

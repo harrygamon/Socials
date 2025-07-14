@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { signOut } from 'next-auth/react';
 
 const navLinks = [
   { name: 'Home', href: '/' },
@@ -14,6 +15,7 @@ const navLinks = [
   { name: 'Messages', href: '/messages' },
   { name: 'Feed', href: '/feed' },
   { name: 'Profile', href: '/profile' },
+  { name: 'Create Post', href: '/create-post' },
 ]
 
 export default function Navbar() {
@@ -40,6 +42,13 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
+            {/* Logout button */}
+            <button
+              onClick={() => signOut()}
+              className="px-4 py-2 rounded-full font-semibold transition-all duration-150 text-base shadow-jelly bg-red-500 hover:bg-red-600 text-white ml-2"
+            >
+              Logout
+            </button>
             {/* Dark mode toggle */}
             <button
               className="ml-2 p-2 rounded-full bg-white/30 hover:bg-white/60 text-jelly-700 shadow"
@@ -69,6 +78,13 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
+            {/* Logout button */}
+            <button
+              onClick={() => { setMobileOpen(false); signOut(); }}
+              className="mt-2 px-4 py-2 rounded-full font-semibold transition-all duration-150 text-base shadow-jelly bg-red-500 hover:bg-red-600 text-white"
+            >
+              Logout
+            </button>
             <button
               className="mt-2 p-2 rounded-full bg-white/30 hover:bg-white/60 text-jelly-700 shadow"
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
