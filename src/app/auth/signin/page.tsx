@@ -50,16 +50,24 @@ export default function SignInPage() {
     }
   }
 
+  const [emailSent, setEmailSent] = useState(false)
+
   const handleEmailSignIn = async () => {
+    if (!email) {
+      setError('Please enter your email address')
+      return
+    }
     setLoading(true)
+    setError('')
+    setEmailSent(false)
     try {
       await signIn('email', { 
         email, 
         callbackUrl: '/',
         redirect: false 
       })
+      setEmailSent(true)
       setError('')
-      // Show success message or redirect
     } catch (err) {
       setError('Email sign in failed')
     } finally {
@@ -89,6 +97,7 @@ export default function SignInPage() {
             className="w-full px-3 py-2 border border-secondary-200 dark:border-secondary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-secondary-800 text-secondary-900 dark:text-white placeholder-secondary-500"
           />
           {error && <div className="text-red-500 text-sm">{error}</div>}
+          {emailSent && <div className="text-green-600 text-sm">Check your email for the magic link!</div>}
           <button
             type="submit"
             disabled={loading}
@@ -114,7 +123,7 @@ export default function SignInPage() {
             <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
             <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
           </svg>
-          {loading ? 'Sending...' : 'Sign in with Email'}
+          {loading ? 'Sending...' : 'Sign in with Email Link'}
         </button>
         <button
           onClick={handleGoogleSignIn}
