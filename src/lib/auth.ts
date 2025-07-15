@@ -119,6 +119,31 @@ export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
 }
 
+// DEV-ONLY: Auto-login as test user in development
+if (process.env.NODE_ENV === 'development') {
+  const DevBypassProvider = {
+    id: 'dev-bypass',
+    name: 'DevBypass',
+    type: 'credentials' as const,
+    credentials: {
+      email: { label: 'Email', type: 'email', placeholder: 'email@example.com' },
+      password: { label: 'Password', type: 'password' },
+    },
+    async authorize() {
+      // Find the test user in the database
+      const user = await prisma.user.findUnique({ where: { email: 'harry.gamon@outlook.com' } });
+      if (!user) return null;
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        image: user.image,
+      };
+    },
+  };
+  authOptions.providers.unshift(DevBypassProvider);
+}
+
 // Helper for protecting server components/routes
 export async function requireAuth(session: unknown) {
   if (!session || typeof session !== 'object' || !('user' in session)) {

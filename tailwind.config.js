@@ -8,33 +8,6 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
-      colors: {
-        lilac: '#C3A6FF',
-        purple: '#7C3AED',
-        teal: '#2DD4BF',
-        coral: '#FF6B6B',
-        midnight: '#1A2233',
-        jet: '#111111',
-        'jelly-50':  '#FAF5FF', // very light lilac
-        'jelly-100': '#F3E8FF', // light lilac
-        'jelly-200': '#E9D5FF', // pale lilac
-        'jelly-300': '#D8B4FE', // soft purple
-        'jelly-400': '#C084FC', // medium purple
-        'jelly-500': '#A21CAF', // vibrant purple
-        'jelly-600': '#9333EA', // rich purple
-        'jelly-700': '#86198F', // deep purple
-        'jelly-900': '#2A1337', // near-black
-        // Gradients can be created with from- and to- utilities
-      },
-      borderRadius: {
-        'xl': '1.25rem',
-        '2xl': '2rem',
-        'pill': '9999px',
-      },
-      boxShadow: {
-        'neumorph': '0 4px 24px 0 rgba(60, 60, 90, 0.10), 0 1.5px 4px 0 rgba(60, 60, 90, 0.08)',
-        'jelly': '0 2px 8px 0 rgba(195, 166, 255, 0.18), 0 1.5px 6px 0 rgba(60, 60, 90, 0.08)',
-      },
       fontFamily: {
         sans: [
           'Inter',
@@ -45,8 +18,14 @@ module.exports = {
           'sans-serif',
         ],
       },
-      backgroundImage: {
-        'jelly-gradient': 'linear-gradient(90deg, #ff80a6 0%, #ff1a64 100%)',
+      borderRadius: {
+        'xl': '1.25rem',
+        '2xl': '2rem',
+        'pill': '9999px',
+      },
+      boxShadow: {
+        'neumorph': '0 4px 24px 0 rgba(60, 60, 90, 0.10), 0 1.5px 4px 0 rgba(60, 60, 90, 0.08)',
+        'jelly': '0 2px 8px 0 rgba(195, 166, 255, 0.18), 0 1.5px 6px 0 rgba(60, 60, 90, 0.08)',
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',

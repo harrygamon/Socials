@@ -53,46 +53,16 @@
 }
 
 @layer base {
-  * {
-    @apply border-jelly-100 dark:border-jelly-900;
-  }
   body {
-    @apply font-sans bg-gradient-to-br from-lilac via-midnight to-teal min-h-screen text-jet;
+    @apply font-sans bg-white min-h-screen text-gray-900;
   }
-
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold text-jelly-700;
-  }
-
-  button, .btn {
-    @apply rounded-full bg-jelly-500 text-white font-semibold shadow-jelly transition-all duration-200 hover:bg-jelly-400 active:bg-jelly-600;
-  }
-
-  .card, .post-card, .profile-card {
-    @apply rounded-2xl shadow-jelly bg-white/90 backdrop-blur border border-jelly-100;
-  }
-}
-
-@layer components {
-  .btn-primary {
-    @apply bg-purple text-white rounded-pill px-6 py-2 font-semibold shadow-neumorph hover:bg-teal transition;
-  }
-  
-  .btn-secondary {
-    @apply bg-secondary-200 hover:bg-secondary-300 text-secondary-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
-  }
-  
-  .card {
-    @apply bg-white rounded-2xl shadow-neumorph p-6;
-  }
-  
-  .input-field {
-    @apply w-full px-3 py-2 border border-secondary-300 dark:border-secondary-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-secondary-800 text-secondary-900 dark:text-secondary-100;
+    @apply font-bold text-gray-800;
   }
 }
 
 input, textarea, select {
-  @apply rounded-xl border border-midnight/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple transition;
+  @apply rounded border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition;
 }
 
 /* Custom scrollbar */
@@ -100,18 +70,15 @@ input, textarea, select {
   width: 8px;
   background: #e5e7eb;
 }
-
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: #C3A6FF;
+  background: #a3a3a3;
   border-radius: 8px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #737373;
 }
 
 .dark ::-webkit-scrollbar-thumb {
@@ -120,7 +87,7 @@ input, textarea, select {
 
 .dark ::-webkit-scrollbar-thumb:hover {
   background: #64748b;
-} 
+}
 
 .animate-swipe-left {
   transform: translateX(-400px) rotate(-18deg);
