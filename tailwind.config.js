@@ -15,6 +15,11 @@ module.exports = {
         coral: '#FF6B6B',
         midnight: '#1A2233',
         jet: '#111111',
+        'jelly-100': '#F3E8FF', // light lilac
+        'jelly-400': '#C084FC', // medium purple
+        'jelly-500': '#A21CAF', // vibrant purple
+        'jelly-700': '#86198F', // deep purple
+        'jelly-900': '#2A1337', // near-black
         // Gradients can be created with from- and to- utilities
       },
       borderRadius: {
