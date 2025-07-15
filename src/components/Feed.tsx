@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { PostCard } from './post-card';
 import Pusher, { Channel } from 'pusher-js';
 import { Spinner } from './ui/Spinner';
+import { Button } from './ui/button';
 
 interface Author {
   id: string;
@@ -85,7 +86,7 @@ export default function Feed() {
   }, [posts]);
 
   return (
-    <div className="space-y-8 bg-jelly-50/60 p-2 sm:p-4 md:p-6 rounded-3xl shadow-jelly max-w-full">
+    <div className="space-y-8">
       {loading && posts.length === 0 ? (
         <div className="flex justify-center py-8"><Spinner size={32} label="Loading posts..." /></div>
       ) : posts.length > 0 ? (
@@ -99,17 +100,17 @@ export default function Feed() {
           }} />
         ))
       ) : (
-        <div className="text-center text-secondary-500 py-8">No posts found.</div>
+        <div className="text-center text-purple/60 py-8 font-semibold">No posts found.</div>
       )}
       {hasMore && !loading && (
-        <button
+        <Button
           onClick={fetchPosts}
           disabled={loading}
-          className="w-full py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg font-medium mt-4 flex items-center justify-center gap-2"
+          className="btn-primary w-full mt-4 flex items-center justify-center gap-2"
         >
           {loading ? <Spinner size={20} /> : null}
           {loading ? 'Loading...' : 'Load More'}
-        </button>
+        </Button>
       )}
     </div>
   );

@@ -22,6 +22,11 @@ export default function RootLayout({
         <Providers>
           {children}
           <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
+          <footer className="w-full max-w-2xl mx-auto mt-12 mb-4 px-4 flex flex-col sm:flex-row items-center justify-center gap-2 text-sm text-midnight/70">
+            <a href="/privacy" className="hover:underline hover:text-purple transition-colors">Privacy Policy</a>
+            <span className="hidden sm:inline mx-2">|</span>
+            <a href="/terms" className="hover:underline hover:text-purple transition-colors">Terms of Service</a>
+          </footer>
         </Providers>
       </body>
     </html>

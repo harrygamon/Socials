@@ -15,11 +15,6 @@ export async function POST(req: NextRequest) {
     }
     // Hash password
     const hashed = await bcrypt.hash(password, 10)
-    // Find Free tier
-    const freeTier = await prisma.tier.findFirst({ where: { name: 'Free' } })
-    if (!freeTier) {
-      return NextResponse.json({ error: 'Free tier not found' }, { status: 500 })
-    }
     // Create user
     const user = await prisma.user.create({
       data: {
@@ -28,7 +23,7 @@ export async function POST(req: NextRequest) {
         password: hashed,
         age: 18, // default, can be updated later
         gender: 'OTHER', // default, can be updated later
-        tierId: freeTier.id,
+        onboarded: false, // User must complete onboarding
       },
     })
     return NextResponse.json({ user: { id: user.id, name: user.name, email: user.email } }, { status: 201 })

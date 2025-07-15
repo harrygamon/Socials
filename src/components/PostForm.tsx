@@ -62,7 +62,7 @@ export default function PostForm() {
       setPreviews([])
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setError(err.message || 'Something went wrong')
+      setError(err.message || 'Something went wrong')
       } else {
         setError('Something went wrong')
       }

@@ -23,7 +23,7 @@ export const authOptions = {
         },
       },
       from: "onboarding@resend.dev",
-      sendVerificationRequest({ identifier, url }) {
+      sendVerificationRequest: async ({ identifier, url }) => {
         const html = `
           <body style="background: #f6f6f9; font-family: 'Helvetica Neue', sans-serif; padding: 2rem;">
             <table role="presentation" style="max-width: 480px; margin: auto; background: #ffffff; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.1);">
@@ -52,7 +52,7 @@ export const authOptions = {
           </body>
         `;
 
-        return resend.emails.send({
+        await resend.emails.send({
           from: "onboarding@resend.dev",
           to: identifier,
           subject: "Login to Social",
@@ -90,7 +90,7 @@ export const authOptions = {
     }),
   ],
   session: {
-    strategy: 'jwt',
+    strategy: 'jwt' as const,
   },
   callbacks: {
     async session({ session, token }: { session: unknown; token: unknown }) {

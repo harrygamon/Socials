@@ -58,21 +58,19 @@ const mockStories = [
 ]
 
 export function Stories() {
-  // Remove: const [activeStory, setActiveStory] = useState<string | null>(null)
-
   return (
-    <div className="bg-white dark:bg-secondary-800 rounded-xl p-4 shadow-sm border border-secondary-200 dark:border-secondary-700">
+    <div className="card p-4 mb-2">
       <div className="flex items-center space-x-4 overflow-x-auto pb-2 scrollbar-hide">
         {/* Add Story Button */}
         <div className="flex flex-col items-center space-y-2 flex-shrink-0">
           <Button
             variant="outline"
             size="sm"
-            className="w-16 h-16 rounded-full border-2 border-dashed border-secondary-300 dark:border-secondary-600 hover:border-primary-500 dark:hover:border-primary-500 transition-colors"
+            className="w-16 h-16 rounded-full border-2 border-dashed border-midnight/20 hover:border-purple transition-colors flex items-center justify-center"
           >
-            <Plus className="w-6 h-6 text-secondary-500" />
+            <Plus className="w-6 h-6 text-purple" />
           </Button>
-          <span className="text-xs text-secondary-600 dark:text-secondary-400 text-center">
+          <span className="text-xs text-midnight/60 text-center font-medium">
             Add Story
           </span>
         </div>
@@ -82,23 +80,12 @@ export function Stories() {
           <div
             key={story.id}
             className="flex flex-col items-center space-y-2 flex-shrink-0 cursor-pointer"
-            // Remove: onClick={() => setActiveStory(story.id)}
           >
-            <div
-              className={`w-16 h-16 rounded-full p-0.5 ${
-                story.hasStory
-                  ? story.isViewed
-                    ? 'bg-secondary-300 dark:bg-secondary-600'
-                    : 'bg-gradient-to-r from-primary-500 to-primary-600'
-                  : 'bg-secondary-200 dark:bg-secondary-700'
-              }`}
-            >
-              <Avatar className="w-full h-full">
-                <AvatarImage src={story.user.image} alt={story.user.name} />
-                <AvatarFallback>{story.user.name.charAt(0)}</AvatarFallback>
-              </Avatar>
-            </div>
-            <span className="text-xs text-secondary-600 dark:text-secondary-400 text-center max-w-16 truncate">
+            <Avatar withRing={!story.isViewed} className="w-16 h-16">
+              <AvatarImage src={story.user.image} alt={story.user.name} />
+              <AvatarFallback>{story.user.name.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <span className="text-xs text-midnight/80 text-center max-w-16 truncate font-medium">
               {story.user.name}
             </span>
           </div>

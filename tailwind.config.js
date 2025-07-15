@@ -9,49 +9,31 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        jelly: {
-          50: '#fff0f6',
-          100: '#ffe0ec',
-          200: '#ffb3c6',
-          300: '#ff80a6',
-          400: '#ff4d85',
-          500: '#ff1a64', // primary
-          600: '#e60058',
-          700: '#b30045',
-          800: '#800032',
-          900: '#4d001f',
-        },
-        primary: {
-          DEFAULT: '#ff1a64',
-          500: '#ff1a64',
-          600: '#e60058',
-          light: '#ff80a6',
-          dark: '#b30045',
-        },
-        accent: {
-          DEFAULT: '#ff4d85',
-          light: '#ffb3c6',
-          dark: '#800032',
-        },
-        border: '#e5e7eb', // Tailwind gray-200
-        secondary: {
-          50: '#f8fafc',
-          100: '#f1f5f9',
-          200: '#e2e8f0',
-          300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
-          600: '#475569',
-          700: '#334155',
-          800: '#1e293b',
-          900: '#0f172a',
-        },
+        lilac: '#C3A6FF',
+        purple: '#7C3AED',
+        teal: '#2DD4BF',
+        coral: '#FF6B6B',
+        midnight: '#1A2233',
+        jet: '#111111',
+        // Gradients can be created with from- and to- utilities
       },
-      fontFamily: {
-        sans: ['Rubik', 'Inter', 'ui-sans-serif', 'system-ui'],
+      borderRadius: {
+        'xl': '1.25rem',
+        '2xl': '2rem',
+        'pill': '9999px',
       },
       boxShadow: {
-        jelly: '0 4px 24px 0 rgba(255, 26, 100, 0.15)',
+        'neumorph': '0 4px 24px 0 rgba(60, 60, 90, 0.10), 0 1.5px 4px 0 rgba(60, 60, 90, 0.08)',
+      },
+      fontFamily: {
+        sans: [
+          'Inter',
+          'Segoe UI',
+          'Roboto',
+          'Helvetica Neue',
+          'Arial',
+          'sans-serif',
+        ],
       },
       backgroundImage: {
         'jelly-gradient': 'linear-gradient(90deg, #ff80a6 0%, #ff1a64 100%)',
@@ -78,4 +60,4 @@ module.exports = {
     },
   },
   plugins: [],
-} 
+}; 

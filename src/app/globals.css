@@ -57,9 +57,7 @@
     @apply border-border;
   }
   body {
-    @apply font-sans bg-jelly-50 text-jelly-900;
-    background-image: linear-gradient(135deg, #fff0f6 0%, #ffb3c6 100%);
-    min-height: 100vh;
+    @apply font-sans bg-gradient-to-br from-lilac via-midnight to-teal min-h-screen text-jet;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -77,7 +75,7 @@
 
 @layer components {
   .btn-primary {
-    @apply bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+    @apply bg-purple text-white rounded-pill px-6 py-2 font-semibold shadow-neumorph hover:bg-teal transition;
   }
   
   .btn-secondary {
@@ -85,7 +83,7 @@
   }
   
   .card {
-    @apply bg-white dark:bg-secondary-800 rounded-xl shadow-sm border border-secondary-200 dark:border-secondary-700;
+    @apply bg-white rounded-2xl shadow-neumorph p-6;
   }
   
   .input-field {
@@ -93,9 +91,14 @@
   }
 }
 
+input, textarea, select {
+  @apply rounded-xl border border-midnight/10 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple focus:border-purple transition;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
+  background: #e5e7eb;
 }
 
 ::-webkit-scrollbar-track {
@@ -103,7 +106,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ffb3c6;
+  background: #C3A6FF;
   border-radius: 8px;
 }
 
@@ -117,4 +120,15 @@
 
 .dark ::-webkit-scrollbar-thumb:hover {
   background: #64748b;
+} 
+
+.animate-swipe-left {
+  transform: translateX(-400px) rotate(-18deg);
+  opacity: 0;
+  transition: transform 0.35s, opacity 0.35s;
+}
+.animate-swipe-right {
+  transform: translateX(400px) rotate(18deg);
+  opacity: 0;
+  transition: transform 0.35s, opacity 0.35s;
 } 

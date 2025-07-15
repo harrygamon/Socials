@@ -62,21 +62,20 @@ export function CreatePost() {
   }
 
   return (
-    <div className="bg-white dark:bg-secondary-800 rounded-xl p-4 shadow-sm border border-secondary-200 dark:border-secondary-700">
+    <div className="card">
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* User Info */}
         <div className="flex items-start space-x-3">
-          <Avatar className="w-10 h-10">
+          <Avatar className="w-10 h-10 shadow-neumorph">
             <AvatarImage src={session?.user?.image || ''} alt={session?.user?.name || ''} />
             <AvatarFallback>{session?.user?.name?.charAt(0) || 'U'}</AvatarFallback>
           </Avatar>
-          
           <div className="flex-1">
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="What's on your mind?"
-              className="w-full p-3 border border-secondary-200 dark:border-secondary-600 rounded-lg resize-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-secondary-800 text-secondary-900 dark:text-white placeholder-secondary-500"
+              className="w-full p-3 bg-lilac/10 border-none rounded-xl resize-none focus:ring-2 focus:ring-purple focus:border-purple text-midnight placeholder-midnight/40 min-h-[60px]"
               rows={3}
             />
           </div>
@@ -86,18 +85,18 @@ export function CreatePost() {
         {images.length > 0 && (
           <div className="grid grid-cols-2 gap-2">
             {images.map((image, index) => (
-              <div key={index} className="relative">
+              <div key={index} className="relative rounded-xl overflow-hidden shadow-neumorph">
                 <Image
                   src={URL.createObjectURL(image)}
                   alt={`Preview ${index + 1}`}
-                  className="w-full h-32 object-cover rounded-lg"
+                  className="w-full h-32 object-cover"
                   width={256}
                   height={128}
                 />
                 <button
                   type="button"
                   onClick={() => removeImage(index)}
-                  className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                  className="absolute top-2 right-2 w-6 h-6 bg-coral text-white rounded-full flex items-center justify-center text-xs hover:bg-purple transition-colors shadow-neumorph"
                 >
                   ×
                 </button>
@@ -107,7 +106,7 @@ export function CreatePost() {
         )}
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-between pt-2 border-t border-secondary-200 dark:border-secondary-700">
+        <div className="flex items-center justify-between pt-2 border-t border-lilac/30">
           <div className="flex items-center space-x-2">
             <label className="cursor-pointer">
               <input
@@ -121,35 +120,32 @@ export function CreatePost() {
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="text-secondary-600 dark:text-secondary-400 hover:text-primary-600 dark:hover:text-primary-400"
+                className="text-purple hover:text-teal"
               >
                 <LucideImage className="w-5 h-5" />
               </Button>
             </label>
-            
             <Button
               type="button"
               variant="ghost"
               size="sm"
-              className="text-secondary-600 dark:text-secondary-400 hover:text-primary-600 dark:hover:text-primary-400"
+              className="text-purple hover:text-teal"
             >
               <Smile className="w-5 h-5" />
             </Button>
-            
             <Button
               type="button"
               variant="ghost"
               size="sm"
-              className="text-secondary-600 dark:text-secondary-400 hover:text-primary-600 dark:hover:text-primary-400"
+              className="text-purple hover:text-teal"
             >
               <Mic className="w-5 h-5" />
             </Button>
           </div>
-          
           <Button
             type="submit"
             disabled={!content.trim() && images.length === 0}
-            className="bg-primary-500 hover:bg-primary-600 text-white"
+            className="btn-primary flex items-center gap-2"
           >
             <Send className="w-4 h-4 mr-2" />
             Post

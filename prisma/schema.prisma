@@ -20,6 +20,7 @@ model User {
   id           String        @id @default(uuid())
   name         String
   email        String        @unique
+  password     String?       // Added for credentials authentication
   image        String?
   bio          String?
   age          Int?
@@ -30,6 +31,7 @@ model User {
   lastActive   DateTime?
   isVerified   Boolean       @default(false)
   deletedAt    DateTime?
+  onboarded    Boolean       @default(false) // Added for onboarding flow
   posts        Post[]
   comments     Comment[]
   likes        Like[]
@@ -39,6 +41,9 @@ model User {
   matchesA         Match[]   @relation("UserAMatches")
   matchesB         Match[]   @relation("UserBMatches")
   notifications    Notification[]
+  passwordResetTokens PasswordResetToken[]
+  likesGiven       UserLike[] @relation("LikesGiven")
+  likesReceived    UserLike[] @relation("LikesReceived")
 }
 
 model Post {
@@ -113,4 +118,26 @@ model Notification {
   read      Boolean  @default(false)
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  used      Boolean  @default(false)
+}
+
+model UserLike {
+  id         String   @id @default(uuid())
+  fromUserId String
+  toUserId   String
+  liked      Boolean  // true = like, false = dislike
+  createdAt  DateTime @default(now())
+  fromUser   User     @relation("LikesGiven", fields: [fromUserId], references: [id])
+  toUser     User     @relation("LikesReceived", fields: [toUserId], references: [id])
+
+  @@unique([fromUserId, toUserId])
 } 
