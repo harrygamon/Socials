@@ -4,7 +4,7 @@ import EmailProvider from 'next-auth/providers/email'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import { prisma } from './db'
-import { resend } from './resend'
+// import { resend } from './resend'
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
@@ -52,13 +52,14 @@ export const authOptions = {
           </body>
         `;
 
-        await resend.emails.send({
-          from: "onboarding@resend.dev",
-          to: identifier,
-          subject: "Login to Social",
-          html: html,
-          text: `Login to Social\n${url}\n\n`,
-        });
+        // Email sending is disabled (no RESEND_API_KEY set)
+        // await resend.emails.send({
+        //   from: "onboarding@resend.dev",
+        //   to: identifier,
+        //   subject: "Login to Social",
+        //   html: html,
+        //   text: `Login to Social\n${url}\n\n`,
+        // });
       },
     }),
     CredentialsProvider({

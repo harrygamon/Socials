@@ -1,9 +1,9 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
-import { Resend } from 'resend';
+// import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// const resend = new Resend(process.env.RESEND_API_KEY);
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -11,16 +11,16 @@ export function cn(...inputs: ClassValue[]) {
 
 export async function sendEmail({ to, subject, html }: { to: string; subject: string; html: string }) {
   try {
-    const { data, error } = await resend.emails.send({
-      from: 'no-reply@social.com', // Update this to your verified sender domain
-      to,
-      subject,
-      html,
-    });
-    if (error) {
-      throw new Error(error.message);
-    }
-    return data;
+    // const { data, error } = await resend.emails.send({
+    //   from: 'no-reply@social.com', // Update this to your verified sender domain
+    //   to,
+    //   subject,
+    //   html,
+    // });
+    // if (error) {
+    //   throw new Error(error.message);
+    // }
+    // return data;
   } catch (err) {
     console.error('Error sending email:', err);
     throw err;
