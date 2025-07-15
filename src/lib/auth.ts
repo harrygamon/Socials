@@ -52,14 +52,8 @@ export const authOptions = {
           </body>
         `;
 
-        // Email sending is disabled (no RESEND_API_KEY set)
-        // await resend.emails.send({
-        //   from: "onboarding@resend.dev",
-        //   to: identifier,
-        //   subject: "Login to Social",
-        //   html: html,
-        //   text: `Login to Social\n${url}\n\n`,
-        // });
+        // Mock email sending: log the magic link to the server console
+        console.log(`\n[MOCK EMAIL] To: ${identifier}\nMagic Link: ${url}\n`);
       },
     }),
     CredentialsProvider({
