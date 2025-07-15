@@ -29,6 +29,7 @@ module.exports = {
       },
       boxShadow: {
         'neumorph': '0 4px 24px 0 rgba(60, 60, 90, 0.10), 0 1.5px 4px 0 rgba(60, 60, 90, 0.08)',
+        'jelly': '0 2px 8px 0 rgba(195, 166, 255, 0.18), 0 1.5px 6px 0 rgba(60, 60, 90, 0.08)',
       },
       fontFamily: {
         sans: [
