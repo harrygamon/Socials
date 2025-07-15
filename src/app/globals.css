@@ -54,7 +54,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-jelly-100 dark:border-jelly-900;
   }
   body {
     @apply font-sans bg-gradient-to-br from-lilac via-midnight to-teal min-h-screen text-jet;
