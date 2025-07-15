@@ -15,7 +15,10 @@ module.exports = {
         coral: '#FF6B6B',
         midnight: '#1A2233',
         jet: '#111111',
+        'jelly-50':  '#FAF5FF', // very light lilac
         'jelly-100': '#F3E8FF', // light lilac
+        'jelly-200': '#E9D5FF', // pale lilac
+        'jelly-300': '#D8B4FE', // soft purple
         'jelly-400': '#C084FC', // medium purple
         'jelly-500': '#A21CAF', // vibrant purple
         'jelly-600': '#9333EA', // rich purple
